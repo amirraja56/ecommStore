@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { remove, increment, decrement } from '../store/cartSlice';
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2';
 import "./cart.css"
 
@@ -10,7 +10,7 @@ export default function Cart() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const products = useSelector((state) => state.cart)
-  const price = products.map((item) => item.price*item.quantity);
+  const price = products.map((item) => item.price * item.quantity);
   const totalSum = price.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   const handleRemove = (product) => {
@@ -53,27 +53,42 @@ export default function Cart() {
               </div>
             </div>
 
-            {products.map((product) => (
-              <div className="row border-top border-bottom">
-                <div className="row main align-items-center">
-                  <div className="col-2"><img className="img-fluid" src={product.image} /></div>
-                  <div className="col">
-                    {/* <div className="row text-muted">{product.title}</div> */}
-                    <div className="row">{product.title}</div>
-                  </div>
-                  <div className="col">
-                    <a type='button' onClick={() => { decrementQuantity(product.id) }}>-&emsp;</a>
-                    <a className="border">{product.quantity}</a>
-                    <a type='button' onClick={() => { incrementQuantity(product.id) }}>&emsp;+</a>
-                  </div>
-                  <div className="col" >&#8360; {product.price*product.quantity} <span className="close">
-                    <button onClick={() => handleRemove(product.id)} className="btn btn-success">remove</button>
-                  </span></div>
-                </div>
+            {products.length === 0 ? (
+              <div className="text-center py-5 w-100">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
+                  alt="Empty Cart"
+                  style={{ width: "120px", marginBottom: "20px" }}
+                />
+                <h4>Your cart is empty</h4>
+                <p>Add items to get started</p>
+                <NavLink to="/" className="btn btn-primary mt-2">Go Back to Shop</NavLink>
               </div>
-            ))}
-
-            <div className="back-to-shop"><a href="/"> &larr; </a><span className="text-muted">Back to shop</span></div>
+            ) : (
+              products.map((product) => (
+                <div key={product.id} className="row border-top border-bottom">
+                  <div className="row main align-items-center">
+                    <div className="col-2"><img className="img-fluid" src={product.image} alt='' /></div>
+                    <div className="col">
+                      <div className="row">{product.title}</div>
+                    </div>
+                    <div className="col">
+                      <NavLink type='button' onClick={() => decrementQuantity(product.id)}>-&emsp;</NavLink>
+                      <NavLink className="border">{product.quantity}</NavLink>
+                      <NavLink type='button' onClick={() => incrementQuantity(product.id)}>&emsp;+</NavLink>
+                    </div>
+                    <div className="col">
+                      &#8360; {product.price * product.quantity}
+                      <span className="close">
+                        <button onClick={() => handleRemove(product.id)} className="btn btn-success">remove</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+            
+            <div className="back-to-shop"><NavLink to="/"> &larr; &nbsp; Back to shop </NavLink></div>
           </div>
           <div className="col-md-4 summary">
             <div><h5><b>Summary</b></h5></div>

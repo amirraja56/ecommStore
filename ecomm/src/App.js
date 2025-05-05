@@ -1,35 +1,42 @@
-import React from 'react'
-import {BrowserRouter,Routes, Route} from 'react-router-dom'
-import { Provider } from 'react-redux'
-import Home from './components/Home'
-import Cart from './components/Cart'
-import Navbar from './components/Navbar'
-import store from './store/store'
-import SignIn from './components/SignIn'
-import SignUp from './components/SignUp'
-import Error from './components/Error'
-import Checkout from './components/Checkout'
-import Success from './components/Success'
-import Cancel from './components/Cancel'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Cart from './components/Cart';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import Error from './components/Error';
+import Checkout from './components/Checkout';
+import Success from './components/Success';
+import Cancel from './components/Cancel';
+import PrivateRoute from './components/PrivateRoute';
+
 export default function App() {
   return (
-   <>
-<Provider store={store}>
-<BrowserRouter>
-   <Navbar/>
-  <Routes>
-    <Route path='/' Component={Home} />
-    <Route path='/cart' Component={Cart} />
-    <Route  path='/login' Component={SignIn}/>
-    <Route  path='/create' Component={SignUp}/>
-    <Route path='/checkout' Component={Checkout}/>
-    <Route path='/success' Component={Success}/>
-    <Route path='/cancel' Component={Cancel}/>
-    <Route path='*' Component={Error} />
-  </Routes>
-</BrowserRouter>
-</Provider>
-   </>
-  )
-}
+    <Provider store={store}>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          {/* Redirect base to login */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
+          {/* Public Routes */}
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/create" element={<SignUp />} />
+
+          {/* Protected Routes */}
+          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route path="/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
+          <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+          <Route path="/success" element={<PrivateRoute><Success /></PrivateRoute>} />
+          <Route path="/cancel" element={<PrivateRoute><Cancel /></PrivateRoute>} />
+
+          {/* Fallback Route */}
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
+  );
+}
