@@ -62,7 +62,7 @@ export default function Cart() {
                 />
                 <h4>Your cart is empty</h4>
                 <p>Add items to get started</p>
-                <NavLink to="/" className="btn btn-primary mt-2">Go Back to Shop</NavLink>
+                <NavLink to="/home" className="btn btn-primary mt-2">Go Back to Shop</NavLink>
               </div>
             ) : (
               products.map((product) => (
@@ -88,7 +88,7 @@ export default function Cart() {
               ))
             )}
             
-            <div className="back-to-shop"><NavLink to="/"> &larr; &nbsp; Back to shop </NavLink></div>
+            <div className="back-to-shop"><NavLink to="/home"> &larr; &nbsp; Back to shop </NavLink></div>
           </div>
           <div className="col-md-4 summary">
             <div><h5><b>Summary</b></h5></div>
